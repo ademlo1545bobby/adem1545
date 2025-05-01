@@ -17,21 +17,25 @@ sleep 1
 # Step 1: Update & install dependencies
 echo -e "${yellow}[+] Installing required packages...${nc}"
 pkg update -y && pkg upgrade -y
-pkg install curl git wget python jq termux-api -y
+pkg install curl wget unzip jq termux-api -y
 
-# Step 2: Clone the repository
-if [ -d "adem1545" ]; then
-  echo -e "${yellow}[!] Existing folder found. Removing...${nc}"
-  rm -rf adem1545
+# Step 2: Download and extract the panel ZIP
+echo -e "${yellow}[+] Downloading panel ZIP from GitHub...${nc}"
+wget -q https://github.com/ademlo1545bobby/adem1545/archive/refs/heads/main.zip -O adem1545.zip
+
+if [ -f "adem1545.zip" ]; then
+  echo -e "${green}[✓] ZIP downloaded successfully.${nc}"
+  unzip -o adem1545.zip > /dev/null
+  rm -f adem1545.zip
+  mv adem1545-main adem1545
+else
+  echo -e "${red}[X] Failed to download ZIP file.${nc}"
+  exit 1
 fi
 
-echo -e "${green}[✓] Downloading adem1545 panel...${nc}"
-git clone https://github.com/ademlo1545bobby/adem1545
-
-# Step 3: Set permissions and enter folder
-cd adem1545 || { echo -e "${red}[X] Failed to enter directory!${nc}"; exit 1; }
+# Step 3: Set permission and launch
+cd adem1545 || { echo -e "${red}[X] Cannot enter folder!${nc}"; exit 1; }
 chmod +x adem1545.sh
 
-# Step 4: Start the panel automatically
-echo -e "${blue}→ Launching ADEM1545 Panel...${nc}"
+echo -e "${blue}→ Starting ADEM1545 Panel...${nc}"
 bash adem1545.sh
