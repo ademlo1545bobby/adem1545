@@ -1,26 +1,36 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+# Colors
+cyan='\033[1;36m'
+yellow='\033[1;33m'
+green='\033[1;32m'
+blue='\033[1;34m'
+nc='\033[0m'
+
 clear
-echo -e "\e[96m"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "      ADEM1545 INSTALLATION"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo -e "${cyan}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo -e "        ADEM1545 INSTALLER"
+echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${nc}"
 sleep 1
 
-# Install required packages
-echo -e "\e[93m→ Installing required packages...\e[0m"
-pkg update -y
-pkg upgrade -y
+# Step 1: Update & install dependencies
+echo -e "${yellow}[+] Installing required packages...${nc}"
+pkg update -y && pkg upgrade -y
 pkg install curl git wget python jq termux-api -y
 
-# Clone the project from GitHub
-echo -e "\e[92m→ Downloading project from GitHub...\e[0m"
+# Step 2: Clone the repository
+if [ -d "adem1545" ]; then
+  echo -e "${yellow}[!] Existing folder found. Removing...${nc}"
+  rm -rf adem1545
+fi
+
+echo -e "${green}[✓] Downloading adem1545 panel...${nc}"
 git clone https://github.com/ademlo1545bobby/adem1545
 
-# Enter the directory and give execution permission
-cd adem1545
-chmod +x install.sh
+# Step 3: Set permissions and enter folder
+cd adem1545 || { echo -e "${red}[X] Failed to enter directory!${nc}"; exit 1; }
+chmod +x adem1545.sh
 
-# Launch the main script
-echo -e "\e[94m→ Starting ADEM1545...\e[0m"
-bash install.sh
+# Step 4: Start the panel automatically
+echo -e "${blue}→ Launching ADEM1545 Panel...${nc}"
+bash adem1545.sh
