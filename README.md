@@ -40,6 +40,7 @@
 pkg update -y && pkg upgrade -y
 pkg install curl -y
 curl -LO https://raw.githubusercontent.com/ademlo1545bobby/adem1545/main/install.sh
+cd adem1545
 chmod +x install.sh
 bash install.sh
 ./adem1545.sh
